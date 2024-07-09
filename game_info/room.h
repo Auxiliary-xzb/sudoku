@@ -1,8 +1,6 @@
 #ifndef SUDOKU_GAME_INFO_ROOM_H_
 #define SUDOKU_GAME_INFO_ROOM_H_
 
-#include <cstdint>
-
 namespace sudoku {
 namespace game_info {
 
@@ -17,32 +15,16 @@ class Room {
   };
 
  public:
-  Room(int x, int y, int value, RoomState state)
+  Room(int x, int y, int value = -1, RoomState state = RoomState::kEmpty)
       : x_(x), y_(y), value_(value), state_(state) {}
-
-  /// \brief 设置单元格坐标
-  /// \param x x坐标
-  /// \param y y坐标
-  void SetPos(const int x, const int y) {
-    x_ = x;
-    y_ = y;
-  }
 
   /// \brief 获取单元格x坐标
   /// \return x坐标
   int x() const { return x_; }
 
-  /// \brief 设置x坐标
-  /// \param x 待设置的x坐标
-  void set_x(const int x) { x_ = x; }
-
   /// \brief 获取单元格y坐标
   /// \return y坐标
   int y() const { return y_; }
-
-  /// \brief 设置y坐标
-  /// \param y 待设置的y坐标
-  void set_y(const int y) { y_ = y; }
 
   /// \brief 获取单元格内存储的值
   /// \return 单元格存储的值
@@ -56,6 +38,8 @@ class Room {
   /// \return 单元格当前状态
   RoomState state() const { return state_; }
 
+  /// \brief 设置单元格状态
+  /// \param state 单元格状态
   void set_state(RoomState state) { state_ = state; }
 
  private:

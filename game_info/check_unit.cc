@@ -1,12 +1,12 @@
-#include "game_info/rooms_unit.h"
+#include "game_info/check_unit.h"
 
 #include "room.h"
 
 using namespace sudoku::game_info;
 
-RoomsUnit::RoomsUnit() : room_array_() {}
+CheckUnit::CheckUnit() : room_array_() {}
 
-bool RoomsUnit::IsFull() const {
+bool CheckUnit::IsFull() const {
   for (const auto &room : room_array_) {
     if (room->state() == Room::RoomState::kEmpty) {
       return false;
@@ -16,7 +16,7 @@ bool RoomsUnit::IsFull() const {
   return true;
 }
 
-bool RoomsUnit::IsValid() const {
+bool CheckUnit::IsValid() const {
   // 每一位代表一个数字
   int valid_mask = 0x1FF;
 

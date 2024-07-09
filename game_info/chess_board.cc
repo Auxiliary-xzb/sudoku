@@ -10,15 +10,16 @@
 using namespace sudoku::game_info;
 
 ChessBoard::ChessBoard() {
+  // 填充三个检测单元
   for (int x = 0; x < kMaxLineCount; ++x) {
     for (int y = 0; y < kMaxLineCount; ++y) {
-      auto* room = new Room(x, y, -1, Room::RoomState::kEmpty);
-      line_array_[y].SetRoom(x, room);
-      column_array_[x].SetRoom(y, room);
+      auto* room = new Room(x, y);
+      line_array_[y][x] = room;
+      column_array_[x][y] = room;
 
-      int block_index = (y / 3) * 3 + x / 3;
-      int block_room_index = (y % 3) * 3 + x % 3;
-      block_array_[block_index].SetRoom(block_room_index, room);
+      int block_index = (y / 3) * 3 + x / 3;       // 块索引
+      int block_room_index = (y % 3) * 3 + x % 3;  // 块内单元格索引
+      block_array_[block_index][block_room_index] = room;
     }
   }
 }
@@ -58,6 +59,7 @@ void ChessBoard::SetLevel(GameLevel level) {
   static std::uniform_int_distribution<size_t> uniform(
       0, kMaxLineCount * kMaxLineCount);
 
+  // 根据不同的游戏等级选择清除单元格的比例
   double rate;
   if (level == GameLevel::kEasy) {
     rate = 0.2;
@@ -67,7 +69,7 @@ void ChessBoard::SetLevel(GameLevel level) {
     rate = 0.6;
   }
 
-  // 清空指定个数的单元格，这些方格也就是客户需要填写的了
+  // 被清除的单元格即需要用户填写的单元格
   auto erase_count = static_cast<size_t>(kMaxLineCount * kMaxLineCount * rate);
   for (size_t i = 0; i < erase_count; ++i) {
     auto index = uniform(random_engine);

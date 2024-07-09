@@ -2,10 +2,9 @@
 #define SUDOKU_GAME_INFO_CHESS_BOARD_H_
 
 #include <array>
-#include <utility>
 #include <vector>
 
-#include "game_info/rooms_unit.h"
+#include "game_info/check_unit.h"
 
 namespace sudoku {
 namespace game_info {
@@ -39,7 +38,7 @@ class ChessBoard {
   /// \return 棋盘大小
   ///
   /// 棋盘为正方形，该返回值为正方形边长
-  size_t GetChessSize() const { return kMaxLineCount; }
+  static size_t GetChessBoarSize() { return kMaxLineCount; }
 
   /// \brief 获取棋盘信息
   /// \return 棋盘信息
@@ -47,7 +46,7 @@ class ChessBoard {
     std::vector<int> chess_board_info;
 
     for (auto line : line_array_) {
-      for (size_t i = 0; i < line.GetRoomUnitSize(); ++i) {
+      for (size_t i = 0; i < line.GetRoomCount(); ++i) {
         chess_board_info.emplace_back(line[i]->value());
       }
     }
@@ -57,9 +56,9 @@ class ChessBoard {
 
  private:
   static constexpr size_t kMaxLineCount = 9;  ///< 棋盘最大列数，行数和列数相同
-  std::array<RoomsUnit, kMaxLineCount> line_array_;    ///< 以行为单位的检测单元
-  std::array<RoomsUnit, kMaxLineCount> column_array_;  ///< 以列为单位的检测单元
-  std::array<RoomsUnit, kMaxLineCount> block_array_;   ///< 以块为单位的检测单元
+  std::array<CheckUnit, kMaxLineCount> line_array_;    ///< 以行为单位的检测单元
+  std::array<CheckUnit, kMaxLineCount> column_array_;  ///< 以列为单位的检测单元
+  std::array<CheckUnit, kMaxLineCount> block_array_;   ///< 以块为单位的检测单元
 };
 
 }  // namespace game_info

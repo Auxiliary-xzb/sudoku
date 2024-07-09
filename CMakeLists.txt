@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
         game_info/room.h
-        game_info/rooms_unit.h
-        game_info/rooms_unit.cc
+        game_info/check_unit.h
+        game_info/check_unit.cc
         game_info/chess_board.h
         game_info/chess_board.cc
 )

@@ -9,7 +9,7 @@ int main() {
   game.Init();
 
   if (game.IsComplete()) {
-    auto size = game.GetChessSize();
+    auto size = game.GetChessBoarSize();
     auto chess_board_info = game.GetChessBoardInfo();
 
     for (int i = 0; i < chess_board_info.size(); ++i) {
