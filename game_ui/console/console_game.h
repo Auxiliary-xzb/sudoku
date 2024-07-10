@@ -20,34 +20,34 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <iostream>
+#ifndef SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
+#define SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
 
 #include "game_info/chess_board.h"
-#include "game_ui/console/console_game.h"
 
-int main() {
-  std::cout << "Hello, World!" << std::endl;
+namespace sudoku {
+namespace game_ui {
+namespace console {
 
-  sudoku::game_info::ChessBoard game;
-  game.Init();
+class ConsoleGame {
+ public:
+  ConsoleGame();
 
-  if (game.IsComplete()) {
-    auto size = game.GetChessBoarSize();
-    auto chess_board_info = game.GetChessBoardInfo();
+  void Start();
 
-    for (int i = 0; i < chess_board_info.size(); ++i) {
-      std::cout << chess_board_info[i] << " ";
-      if ((i + 1) % size == 0) {
-        std::cout << std::endl;
-      }
-    }
+ private:
+  game_info::ChessBoard::GameLevel SetGameLevel();
 
-    std::cout << std::endl;
-  }
+  void Play();
 
-  sudoku::game_ui::console::ConsoleGame console_game;
-  console_game.Start();
+  void Show();
 
-  std::system("pause");
-  return 0;
-}
+ private:
+  game_info::ChessBoard chess_board_;
+};
+
+}  // namespace console
+}  // namespace game_ui
+}  // namespace sudoku
+
+#endif  // SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
