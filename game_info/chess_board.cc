@@ -2,10 +2,10 @@
 // Copyright © 2024 XiongZhiBin <519083070@qq.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the “Software”), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -23,6 +23,7 @@
 #include "game_info/chess_board.h"
 
 #include <algorithm>
+#include <chrono>
 #include <map>
 #include <random>
 #include <vector>
@@ -54,8 +55,8 @@ void ChessBoard::Init() {
                                         "higbcaefd", "bcaefdhig", "efdhigbca"};
 
   std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-  std::shuffle(values.begin(), values.end(),
-               std::mt19937(std::random_device()()));
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::shuffle(values.begin(), values.end(), std::default_random_engine(seed));
   std::map<char, int> relation_map;
 
   // 打乱顺序后，a ~ i分别和数组中的值对应
@@ -77,9 +78,10 @@ void ChessBoard::Init() {
 }
 
 void ChessBoard::SetLevel(GameLevel level) {
-  static std::default_random_engine random_engine;
-  static std::uniform_int_distribution<size_t> uniform(
-      0, kMaxLineCount * kMaxLineCount);
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine random_engine(seed);
+  std::uniform_int_distribution<size_t> uniform(0,
+                                                kMaxLineCount * kMaxLineCount);
 
   // 根据不同的游戏等级选择清除单元格的比例
   double rate;
