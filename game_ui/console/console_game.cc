@@ -43,10 +43,16 @@ static constexpr char kRigtSide[] = "\u2524";
 static constexpr char kUpSide[] = "\u252c";
 static constexpr char kDownSide[] = "\u2534";
 static constexpr char kCross[] = "\u253c";
+static constexpr char kCurrentItem[] = "\u25b4";
 
 static void SetConsoleEncoding();
+static std::string GetChessBoardUpSide(size_t chess_board_size);
+static std::string GetChessBoardLineSeperator(size_t chess_board_size,
+                                              size_t current_item_index);
+static std::string GetChessBoardDownSide(size_t chess_board_size,
+                                         size_t current_item_index);
 
-ConsoleGame::ConsoleGame() {
+ConsoleGame::ConsoleGame() : current_item_index_(11) {
   chess_board_.Init();
   SetConsoleEncoding();
 }
@@ -92,47 +98,8 @@ void ConsoleGame::Show() {
   auto chess_board_info = chess_board_.GetChessBoardInfo();
   auto size = chess_board_.GetChessBoarSize();
 
-  // 顶层边框
-  std::stringstream up_side;
-  up_side << kLeftUpCorner;
-  for (int i = 0; i < size; ++i) {
-    up_side << kLine << kLine << kLine;
-    if (i == size - 1) {
-      up_side << kRightUpCorner;
-    } else {
-      up_side << kUpSide;
-    }
-  }
-  up_side << "\n";
-
-  // 底层边框
-  std::stringstream down_side;
-  down_side << kLeftDownCorner;
-  for (int i = 0; i < size; ++i) {
-    down_side << kLine << kLine << kLine;
-    if (i == size - 1) {
-      down_side << kRightDownCorner;
-    } else {
-      down_side << kDownSide;
-    }
-  }
-  down_side << "\n";
-
-  // 分隔行
-  std::stringstream line_seperator;
-  line_seperator << kLeftSide;
-  for (int i = 0; i < size; ++i) {
-    line_seperator << kLine << kLine << kLine;
-    if (i == size - 1) {
-      line_seperator << kRigtSide;
-    } else {
-      line_seperator << kCross;
-    }
-  }
-  line_seperator << "\n";
-
   std::stringstream chess_board;
-  chess_board << up_side.str();
+  chess_board << GetChessBoardUpSide(size);
 
   auto line_count = chess_board_info.size() / size;
   for (int i = 0; i < line_count; ++i) {
@@ -149,10 +116,16 @@ void ConsoleGame::Show() {
     }
     chess_board << line.str() << "\n";
 
+    size_t index = -1;
+    // 选中项目在当前行，则计算行内索引
+    if (current_item_index_ / size == i) {
+      index = current_item_index_ % size;
+    }
+
     if (i == line_count - 1) {
-      chess_board << down_side.str();
+      chess_board << GetChessBoardDownSide(size, index);
     } else {
-      chess_board << line_seperator.str();
+      chess_board << GetChessBoardLineSeperator(size, index);
     }
   }
 
@@ -163,4 +136,70 @@ void SetConsoleEncoding() {
 #ifdef __WIN32
   SetConsoleOutputCP(CP_UTF8);
 #endif
+}
+
+std::string GetChessBoardUpSide(size_t chess_board_size) {
+  std::stringstream chess_board_up_side;
+  chess_board_up_side << kLeftUpCorner;
+  for (int i = 0; i < chess_board_size; ++i) {
+    chess_board_up_side << kLine << kLine << kLine;
+    if (i == chess_board_size - 1) {
+      chess_board_up_side << kRightUpCorner;
+    } else {
+      chess_board_up_side << kUpSide;
+    }
+  }
+  chess_board_up_side << "\n";
+
+  return chess_board_up_side.str();
+}
+
+std::string GetChessBoardLineSeperator(size_t chess_board_size,
+                                       size_t current_item_index) {
+  std::stringstream chess_board_line_seperator;
+  chess_board_line_seperator << kLeftSide;
+
+  for (int i = 0; i < chess_board_size; ++i) {
+    if (current_item_index == i) {
+      // 如果当前选中索引在当前分隔行中，则显示指示图标
+      chess_board_line_seperator << kLine << kCurrentItem << kLine;
+    } else {
+      // 将current_item_index设置为-1，表示当前选中索引不在分隔行中
+      chess_board_line_seperator << kLine << kLine << kLine;
+    }
+
+    if (i == chess_board_size - 1) {
+      chess_board_line_seperator << kRigtSide;
+    } else {
+      chess_board_line_seperator << kCross;
+    }
+  }
+  chess_board_line_seperator << "\n";
+
+  return chess_board_line_seperator.str();
+}
+
+std::string GetChessBoardDownSide(size_t chess_board_size,
+                                  size_t current_item_index) {
+  std::stringstream chess_board_down_side;
+  chess_board_down_side << kLeftDownCorner;
+
+  for (int i = 0; i < chess_board_size; ++i) {
+    if (current_item_index == i) {
+      // 如果当前选中索引在当前分隔行中，则显示指示图标
+      chess_board_down_side << kLine << kCurrentItem << kLine;
+    } else {
+      // 将current_item_index设置为-1，表示当前选中索引不在分隔行中
+      chess_board_down_side << kLine << kLine << kLine;
+    }
+
+    if (i == chess_board_size - 1) {
+      chess_board_down_side << kRightDownCorner;
+    } else {
+      chess_board_down_side << kDownSide;
+    }
+  }
+  chess_board_down_side << "\n";
+
+  return chess_board_down_side.str();
 }
