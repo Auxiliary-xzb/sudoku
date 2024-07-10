@@ -36,11 +36,9 @@ class ConsoleGame {
   void Start();
 
  private:
-  game_info::ChessBoard::GameLevel SetGameLevel();
-
   void Play();
 
-  void Show();
+  void Show() const;
 
  private:
   game_info::ChessBoard chess_board_;

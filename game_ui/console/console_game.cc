@@ -26,6 +26,7 @@
 #include <windows.h>
 #endif
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 
@@ -46,55 +47,32 @@ static constexpr char kCross[] = "\u253c";
 static constexpr char kCurrentItem[] = "\u25b4";
 
 static void SetConsoleEncoding();
+static ChessBoard::GameLevel SetGameLevel();
 static std::string GetChessBoardUpSide(size_t chess_board_size);
 static std::string GetChessBoardLineSeperator(size_t chess_board_size,
                                               size_t current_item_index);
 static std::string GetChessBoardDownSide(size_t chess_board_size,
                                          size_t current_item_index);
 
-ConsoleGame::ConsoleGame() : current_item_index_(11) {
+ConsoleGame::ConsoleGame() : current_item_index_(0) {
   chess_board_.Init();
   SetConsoleEncoding();
 }
 
 void ConsoleGame::Start() {
   chess_board_.SetLevel(SetGameLevel());
+
+  // 指向第一个待填充的单元格
+  auto chess_board_info = chess_board_.GetChessBoardInfo();
+  auto it = std::find(chess_board_info.begin(), chess_board_info.end(), -1);
+  current_item_index_ = it - chess_board_info.begin();
+
   Show();
-}
-
-ChessBoard::GameLevel ConsoleGame::SetGameLevel() {
-  std::cout << "Please choose game level:" << std::endl
-            << "1. Easy" << std::endl
-            << "2. Middle" << std::endl
-            << "3. Hard" << std::endl;
-
-  ChessBoard::GameLevel level;
-  while (true) {
-    char input_char;
-    std::cin >> input_char;
-
-    if (input_char == '1') {
-      std::cout << "Easy" << std::endl;
-      level = ChessBoard::GameLevel::kEasy;
-    } else if (input_char == '2') {
-      std::cout << "Middle" << std::endl;
-      level = ChessBoard::GameLevel::kMiddle;
-    } else if (input_char == '3') {
-      std::cout << "Hard" << std::endl;
-      level = ChessBoard::GameLevel::kHard;
-    } else {
-      continue;
-    }
-
-    break;
-  }
-
-  return level;
 }
 
 void ConsoleGame::Play() {}
 
-void ConsoleGame::Show() {
+void ConsoleGame::Show() const {
   auto chess_board_info = chess_board_.GetChessBoardInfo();
   auto size = chess_board_.GetChessBoarSize();
 
@@ -136,6 +114,36 @@ void SetConsoleEncoding() {
 #ifdef __WIN32
   SetConsoleOutputCP(CP_UTF8);
 #endif
+}
+
+ChessBoard::GameLevel SetGameLevel() {
+  std::cout << "Please choose game level:" << std::endl
+            << "1. Easy" << std::endl
+            << "2. Middle" << std::endl
+            << "3. Hard" << std::endl;
+
+  ChessBoard::GameLevel level;
+  while (true) {
+    char input_char;
+    std::cin >> input_char;
+
+    if (input_char == '1') {
+      std::cout << "Easy" << std::endl;
+      level = ChessBoard::GameLevel::kEasy;
+    } else if (input_char == '2') {
+      std::cout << "Middle" << std::endl;
+      level = ChessBoard::GameLevel::kMiddle;
+    } else if (input_char == '3') {
+      std::cout << "Hard" << std::endl;
+      level = ChessBoard::GameLevel::kHard;
+    } else {
+      continue;
+    }
+
+    break;
+  }
+
+  return level;
 }
 
 std::string GetChessBoardUpSide(size_t chess_board_size) {
