@@ -2,10 +2,10 @@
 // Copyright © 2024 XiongZhiBin <519083070@qq.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the “Software”), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -20,24 +20,24 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SUDOKU_GAME_INFO_ROOM_H_
-#define SUDOKU_GAME_INFO_ROOM_H_
+#ifndef SUDOKU_GAME_INFO_CELL_H_
+#define SUDOKU_GAME_INFO_CELL_H_
 
 namespace sudoku {
 namespace game_info {
 
 /// \brief 存储数值的单元格
-class Room {
+class Cell {
  public:
   /// \brief 单元格当前状态
-  enum class RoomState : uint8_t {
+  enum class CellState : uint8_t {
     kSystemFilled,  ///< 单元格被系统填充
     kUserFilled,    ///< 单元格被用户
     kEmpty,         ///< 单元格空
   };
 
  public:
-  Room(int x, int y, int value = -1, RoomState state = RoomState::kEmpty)
+  Cell(int x, int y, int value = -1, CellState state = CellState::kEmpty)
       : x_(x), y_(y), value_(value), state_(state) {}
 
   /// \brief 获取单元格x坐标
@@ -58,20 +58,20 @@ class Room {
 
   /// \brief 获取单元格当前状态
   /// \return 单元格当前状态
-  RoomState state() const { return state_; }
+  CellState state() const { return state_; }
 
   /// \brief 设置单元格状态
   /// \param state 单元格状态
-  void set_state(RoomState state) { state_ = state; }
+  void set_state(CellState state) { state_ = state; }
 
  private:
   int x_;           ///< 单元格x坐标
   int y_;           ///< 单元格y坐标
   int value_;       ///< 单元格值
-  RoomState state_; ///< 单元格状态
+  CellState state_; ///< 单元格状态
 };
 
 } // namespace game_info
 } // namespace sudoku
 
-#endif  // SUDOKU_GAME_INFO_ROOM_H_
+#endif  // SUDOKU_GAME_INFO_CELL_H_

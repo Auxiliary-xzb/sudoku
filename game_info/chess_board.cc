@@ -28,7 +28,7 @@
 #include <random>
 #include <vector>
 
-#include "game_info/room.h"
+#include "game_info/cell.h"
 
 using namespace sudoku::game_info;
 
@@ -36,7 +36,7 @@ ChessBoard::ChessBoard() {
   // 填充三个检测单元
   for (int x = 0; x < kMaxLineCount; ++x) {
     for (int y = 0; y < kMaxLineCount; ++y) {
-      auto* room = new Room(x, y);
+      auto* room = new Cell(x, y);
       line_array_[y][x] = room;
       column_array_[x][y] = room;
 
@@ -69,7 +69,7 @@ void ChessBoard::Init() {
     for (int y = 0; y < kMaxLineCount; ++y) {
       auto* room = line_array_[y][x];
       room->set_value(relation_map[chess_pattern[x][y]]);
-      room->set_state(Room::RoomState::kSystemFilled);
+      room->set_state(Cell::CellState::kSystemFilled);
     }
   }
 
@@ -99,22 +99,22 @@ void ChessBoard::SetLevel(GameLevel level) {
     auto index = uniform(random_engine);
     auto* room = line_array_[index / kMaxLineCount][index % kMaxLineCount];
     room->set_value(-1);
-    room->set_state(Room::RoomState::kEmpty);
+    room->set_state(Cell::CellState::kEmpty);
   }
 }
 
-bool ChessBoard::FillRoom(int room_x, int room_y, int room_value) {
+bool ChessBoard::FillCell(int room_x, int room_y, int room_value) {
   if (room_x > kMaxLineCount || room_y > kMaxLineCount) {
     return false;
   }
 
   auto* room = line_array_[room_y - 1][room_x - 1];
-  if (room->state() == Room::RoomState::kSystemFilled) {
+  if (room->state() == Cell::CellState::kSystemFilled) {
     return false;
   }
 
   room->set_value(room_value);
-  room->set_state(Room::RoomState::kUserFilled);
+  room->set_state(Cell::CellState::kUserFilled);
   return true;
 }
 

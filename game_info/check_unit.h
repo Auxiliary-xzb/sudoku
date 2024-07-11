@@ -2,10 +2,10 @@
 // Copyright © 2024 XiongZhiBin <519083070@qq.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the “Software”), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -25,7 +25,7 @@
 
 #include <array>
 
-#include "game_info/room.h"
+#include "game_info/cell.h"
 
 namespace sudoku {
 namespace game_info {
@@ -58,8 +58,8 @@ class CheckUnit {
   /// \brief 定位检测单元中的单元格
   /// \param index 单元格索引
   /// \return 索引合法时发挥单元格指针，否则抛出异常
-  Room *&operator[](size_t index) {
-    if (index > kMaxRoomCount) {
+  Cell *&operator[](size_t index) {
+    if (index > kMaxCellCount) {
       throw std::out_of_range("Out of rang");
     }
 
@@ -68,14 +68,14 @@ class CheckUnit {
 
   /// \brief 获取检测单元中单元格个数
   /// \return 检测单元中单元格个数
-  static size_t GetRoomCount() { return kMaxRoomCount; }
+  static size_t GetCellCount() { return kMaxCellCount; }
 
  private:
-  static constexpr int kMaxRoomCount = 9;  ///< 最大单元格个数
+  static constexpr int kMaxCellCount = 9;  ///< 最大单元格个数
 
   // 使用指针使得单元格的修改可以反应到所有包含该单元格的测试单元中，
   // 使得变更单元格内容更加便捷，无需同时手动修改所有检测单元
-  std::array<Room *, kMaxRoomCount> room_array_;  ///< 块内单元格数组
+  std::array<Cell *, kMaxCellCount> room_array_;  ///< 块内单元格数组
 };
 
 }  // namespace game_info

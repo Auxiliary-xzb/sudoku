@@ -20,8 +20,8 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
-#define SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
+#ifndef SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAME_H_
+#define SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAME_H_
 
 #include "game_info/chess_board.h"
 
@@ -49,4 +49,4 @@ class ConsoleGame {
 }  // namespace game_ui
 }  // namespace sudoku
 
-#endif  // SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAEM_H_
+#endif  // SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAME_H_

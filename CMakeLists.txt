@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
-        game_info/room.h
+        game_info/cell.h
         game_info/check_unit.h
         game_info/check_unit.cc
         game_info/chess_board.h

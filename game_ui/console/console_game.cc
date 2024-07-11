@@ -33,26 +33,26 @@
 using namespace sudoku::game_info;
 using namespace sudoku::game_ui::console;
 
-static constexpr char kLine[] = "\u2500";
-static constexpr char kCloumn[] = "\u2502";
-static constexpr char kLeftUpCorner[] = "\u250c";
-static constexpr char kRightUpCorner[] = "\u2510";
-static constexpr char kLeftDownCorner[] = "\u2514";
-static constexpr char kRightDownCorner[] = "\u2518";
-static constexpr char kLeftSide[] = "\u251c";
-static constexpr char kRigtSide[] = "\u2524";
-static constexpr char kUpSide[] = "\u252c";
-static constexpr char kDownSide[] = "\u2534";
-static constexpr char kCross[] = "\u253c";
-static constexpr char kCurrentItem[] = "\u25b4";
+static constexpr char kSymbolLine[] = "\u2500";
+static constexpr char kSymbolColumn[] = "\u2502";
+static constexpr char kSymbolLeftUpCorner[] = "\u250c";
+static constexpr char kSymbolRightUpCorner[] = "\u2510";
+static constexpr char kSymbolDownCorner[] = "\u2514";
+static constexpr char kSymbolRightDownCorner[] = "\u2518";
+static constexpr char kSymbolLeftEdge[] = "\u251c";
+static constexpr char kSymbolRightEdge[] = "\u2524";
+static constexpr char kSymbolUpEdge[] = "\u252c";
+static constexpr char kSymbolDownEdge[] = "\u2534";
+static constexpr char kSymbolCross[] = "\u253c";
+static constexpr char kSymbolCurrentCell[] = "\u25b4";
 
 static void SetConsoleEncoding();
 static ChessBoard::GameLevel SetGameLevel();
-static std::string GetChessBoardUpSide(size_t chess_board_size);
-static std::string GetChessBoardLineSeperator(size_t chess_board_size,
-                                              size_t current_item_index);
-static std::string GetChessBoardDownSide(size_t chess_board_size,
-                                         size_t current_item_index);
+static std::string GetChessBoardUpEdge(size_t chess_board_edge_length);
+static std::string GetChessBoardLineSeperator(size_t chess_board_edge_length,
+                                              size_t current_cell_index);
+static std::string GetChessBoardDownEdge(size_t chess_board_edge_length,
+                                         size_t current_cell_index);
 
 ConsoleGame::ConsoleGame() : current_item_index_(0) {
   chess_board_.Init();
@@ -74,15 +74,15 @@ void ConsoleGame::Play() {}
 
 void ConsoleGame::Show() const {
   auto chess_board_info = chess_board_.GetChessBoardInfo();
-  auto size = chess_board_.GetChessBoarSize();
+  auto size = chess_board_.GetEdgeLength();
 
   std::stringstream chess_board;
-  chess_board << GetChessBoardUpSide(size);
+  chess_board << GetChessBoardUpEdge(size);
 
   auto line_count = chess_board_info.size() / size;
   for (int i = 0; i < line_count; ++i) {
     std::stringstream line;
-    line << kCloumn;
+    line << kSymbolColumn;
 
     for (int j = 0; j < size; ++j) {
       if (chess_board_info[i * size + j] == -1) {
@@ -90,7 +90,7 @@ void ConsoleGame::Show() const {
       } else {
         line << " " << std::to_string(chess_board_info[i * size + j]) << " ";
       }
-      line << kCloumn;
+      line << kSymbolColumn;
     }
     chess_board << line.str() << "\n";
 
@@ -101,7 +101,7 @@ void ConsoleGame::Show() const {
     }
 
     if (i == line_count - 1) {
-      chess_board << GetChessBoardDownSide(size, index);
+      chess_board << GetChessBoardDownEdge(size, index);
     } else {
       chess_board << GetChessBoardLineSeperator(size, index);
     }
@@ -146,68 +146,73 @@ ChessBoard::GameLevel SetGameLevel() {
   return level;
 }
 
-std::string GetChessBoardUpSide(size_t chess_board_size) {
-  std::stringstream chess_board_up_side;
-  chess_board_up_side << kLeftUpCorner;
-  for (int i = 0; i < chess_board_size; ++i) {
-    chess_board_up_side << kLine << kLine << kLine;
-    if (i == chess_board_size - 1) {
-      chess_board_up_side << kRightUpCorner;
+std::string GetChessBoardUpEdge(size_t chess_board_edge_length) {
+  // 生成棋盘顶部的边框
+  std::stringstream up_edge;
+  up_edge << kSymbolLeftUpCorner;
+  for (int i = 0; i < chess_board_edge_length; ++i) {
+    up_edge << kSymbolLine << kSymbolLine << kSymbolLine;
+    if (i == chess_board_edge_length - 1) {
+      up_edge << kSymbolRightUpCorner;
     } else {
-      chess_board_up_side << kUpSide;
+      up_edge << kSymbolUpEdge;
     }
   }
-  chess_board_up_side << "\n";
+  up_edge << "\n";
 
-  return chess_board_up_side.str();
+  return up_edge.str();
 }
 
-std::string GetChessBoardLineSeperator(size_t chess_board_size,
-                                       size_t current_item_index) {
-  std::stringstream chess_board_line_seperator;
-  chess_board_line_seperator << kLeftSide;
+std::string GetChessBoardLineSeperator(size_t chess_board_edge_length,
+                                       size_t current_cell_index) {
+  // 生成两行数值之间的行分隔符
+  // 每个单元格的边由三个横线组成，单元格内数据和中间的横线在同一列
+  // 当有单元格被选中时，将单元格数值下的横线替换为指示符
+  std::stringstream line_seperator;
+  line_seperator << kSymbolLeftEdge;
 
-  for (int i = 0; i < chess_board_size; ++i) {
-    if (current_item_index == i) {
-      // 如果当前选中索引在当前分隔行中，则显示指示图标
-      chess_board_line_seperator << kLine << kCurrentItem << kLine;
+  for (int i = 0; i < chess_board_edge_length; ++i) {
+    if (current_cell_index == i) {
+      // 被选中单元格下方的横线被替换为指示符
+      line_seperator << kSymbolLine << kSymbolCurrentCell << kSymbolLine;
     } else {
-      // 将current_item_index设置为-1，表示当前选中索引不在分隔行中
-      chess_board_line_seperator << kLine << kLine << kLine;
+      line_seperator << kSymbolLine << kSymbolLine << kSymbolLine;
     }
 
-    if (i == chess_board_size - 1) {
-      chess_board_line_seperator << kRigtSide;
+    // 两个单元格之间以十字符号链接，最后一个则使用右边界符
+    if (i == chess_board_edge_length - 1) {
+      line_seperator << kSymbolRightEdge;
     } else {
-      chess_board_line_seperator << kCross;
+      line_seperator << kSymbolCross;
     }
   }
-  chess_board_line_seperator << "\n";
+  line_seperator << "\n";
 
-  return chess_board_line_seperator.str();
+  return line_seperator.str();
 }
 
-std::string GetChessBoardDownSide(size_t chess_board_size,
-                                  size_t current_item_index) {
-  std::stringstream chess_board_down_side;
-  chess_board_down_side << kLeftDownCorner;
+std::string GetChessBoardDownEdge(size_t chess_board_edge_length,
+                                  size_t current_cell_index) {
+  // 生成棋盘的底边
+  // 底边和行分隔符类似也要处理单元格被选中的情况
+  std::stringstream down_edge;
+  down_edge << kSymbolDownCorner;
 
-  for (int i = 0; i < chess_board_size; ++i) {
-    if (current_item_index == i) {
-      // 如果当前选中索引在当前分隔行中，则显示指示图标
-      chess_board_down_side << kLine << kCurrentItem << kLine;
+  for (int i = 0; i < chess_board_edge_length; ++i) {
+    if (current_cell_index == i) {
+      // 被选中单元格下方的横线被替换为指示符
+      down_edge << kSymbolLine << kSymbolCurrentCell << kSymbolLine;
     } else {
-      // 将current_item_index设置为-1，表示当前选中索引不在分隔行中
-      chess_board_down_side << kLine << kLine << kLine;
+      down_edge << kSymbolLine << kSymbolLine << kSymbolLine;
     }
 
-    if (i == chess_board_size - 1) {
-      chess_board_down_side << kRightDownCorner;
+    if (i == chess_board_edge_length - 1) {
+      down_edge << kSymbolRightDownCorner;
     } else {
-      chess_board_down_side << kDownSide;
+      down_edge << kSymbolDownEdge;
     }
   }
-  chess_board_down_side << "\n";
+  down_edge << "\n";
 
-  return chess_board_down_side.str();
+  return down_edge.str();
 }

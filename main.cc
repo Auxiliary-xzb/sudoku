@@ -2,10 +2,10 @@
 // Copyright © 2024 XiongZhiBin <519083070@qq.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the “Software”), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -32,7 +32,7 @@ int main() {
   game.Init();
 
   if (game.IsComplete()) {
-    auto size = game.GetChessBoarSize();
+    auto size = game.GetEdgeLength();
     auto chess_board_info = game.GetChessBoardInfo();
 
     for (int i = 0; i < chess_board_info.size(); ++i) {

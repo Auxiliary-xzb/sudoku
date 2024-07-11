@@ -2,10 +2,10 @@
 // Copyright © 2024 XiongZhiBin <519083070@qq.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the “Software”), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the “Software”), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -50,7 +50,7 @@ class ChessBoard {
   /// \param room_y 单元格在棋盘中的y坐标
   /// \param room_value 单元格存储的值
   /// \return 填充成功返回true，否则返回false
-  bool FillRoom(int room_x, int room_y, int room_value);
+  bool FillCell(int room_x, int room_y, int room_value);
 
   /// \brief 数独游戏是否填充完成
   /// \return 填充成功返回true，填充失败返回false
@@ -60,7 +60,7 @@ class ChessBoard {
   /// \return 棋盘大小
   ///
   /// 棋盘为正方形，该返回值为正方形边长
-  static size_t GetChessBoarSize() { return kMaxLineCount; }
+  static size_t GetEdgeLength() { return kMaxLineCount; }
 
   /// \brief 获取棋盘信息
   /// \return 棋盘信息
@@ -68,7 +68,7 @@ class ChessBoard {
     std::vector<int> chess_board_info;
 
     for (auto line : line_array_) {
-      for (size_t i = 0; i < line.GetRoomCount(); ++i) {
+      for (size_t i = 0; i < line.GetCellCount(); ++i) {
         chess_board_info.emplace_back(line[i]->value());
       }
     }
