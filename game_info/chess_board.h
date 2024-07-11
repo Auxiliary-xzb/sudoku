@@ -26,6 +26,7 @@
 #include <array>
 #include <vector>
 
+#include "game_info/cell.h"
 #include "game_info/check_unit.h"
 
 namespace sudoku {
@@ -46,11 +47,11 @@ class ChessBoard {
   void SetLevel(GameLevel level);
 
   /// \brief 填充单元格
-  /// \param room_x 单元格在棋盘中的x坐标
-  /// \param room_y 单元格在棋盘中的y坐标
-  /// \param room_value 单元格存储的值
+  /// \param cell_x 单元格在棋盘中的x坐标
+  /// \param cell_y 单元格在棋盘中的y坐标
+  /// \param cell_value 单元格存储的值
   /// \return 填充成功返回true，否则返回false
-  bool FillCell(int room_x, int room_y, int room_value);
+  bool FillCell(int cell_x, int cell_y, int cell_value);
 
   /// \brief 数独游戏是否填充完成
   /// \return 填充成功返回true，填充失败返回false
@@ -64,12 +65,12 @@ class ChessBoard {
 
   /// \brief 获取棋盘信息
   /// \return 棋盘信息
-  std::vector<int> GetChessBoardInfo() const {
-    std::vector<int> chess_board_info;
+  std::vector<Cell *> GetChessBoardInfo() const {
+    std::vector<Cell *> chess_board_info;
 
     for (auto line : line_array_) {
       for (size_t i = 0; i < line.GetCellCount(); ++i) {
-        chess_board_info.emplace_back(line[i]->value());
+        chess_board_info.emplace_back(line[i]);
       }
     }
 

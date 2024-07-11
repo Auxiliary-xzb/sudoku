@@ -20,34 +20,10 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-
-#include "game_info/chess_board.h"
 #include "game_ui/console/console_game.h"
 
 int main() {
-  std::cout << "Hello, World!" << std::endl;
-
-  sudoku::game_info::ChessBoard game;
-  game.Init();
-
-  if (game.IsComplete()) {
-    auto size = game.GetEdgeLength();
-    auto chess_board_info = game.GetChessBoardInfo();
-
-    for (int i = 0; i < chess_board_info.size(); ++i) {
-      std::cout << chess_board_info[i] << " ";
-      if ((i + 1) % size == 0) {
-        std::cout << std::endl;
-      }
-    }
-
-    std::cout << std::endl;
-  }
-
   sudoku::game_ui::console::ConsoleGame console_game;
   console_game.Start();
-
-  std::system("pause");
   return 0;
 }

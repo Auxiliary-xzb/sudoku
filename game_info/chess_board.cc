@@ -103,17 +103,17 @@ void ChessBoard::SetLevel(GameLevel level) {
   }
 }
 
-bool ChessBoard::FillCell(int room_x, int room_y, int room_value) {
-  if (room_x > kMaxLineCount || room_y > kMaxLineCount) {
+bool ChessBoard::FillCell(int cell_x, int cell_y, int cell_value) {
+  if (cell_x > kMaxLineCount || cell_y > kMaxLineCount) {
     return false;
   }
 
-  auto* room = line_array_[room_y - 1][room_x - 1];
+  auto* room = line_array_[cell_y - 1][cell_x - 1];
   if (room->state() == Cell::CellState::kSystemFilled) {
     return false;
   }
 
-  room->set_value(room_value);
+  room->set_value(cell_value);
   room->set_state(Cell::CellState::kUserFilled);
   return true;
 }

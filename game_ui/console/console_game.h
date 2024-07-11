@@ -38,11 +38,34 @@ class ConsoleGame {
  private:
   void Play();
 
+  /// \brief 显示棋盘信息
   void Show() const;
 
+  /// \brief 构建棋盘顶部边框
+  /// \return 棋盘顶部边框
+  std::string GetChessBoardUpEdge() const;
+
+  /// \brief 构建两行数值间的分隔行
+  /// \param selected_cell_index 当前被选中单元在行内索引
+  /// \return 两行数值间的分隔行
+  ///
+  /// 棋盘单元格被选中将会显示选中标识符，因此如果当前单元格被选中，则根据
+  /// 提供的选中单元格在在本行的索引显示选中标识符。当本行没有单元格被修改
+  /// 时，传递-1即可。
+  std::string GetChessBoardLineSeperator(size_t selected_cell_index) const;
+
+  /// \brief 构建棋盘底部边框
+  /// \param selected_cell_index 当前被选中单元在行内索引
+  /// \return 棋盘底部边框
+  ///
+  /// 和分隔行相同，当最后一排单元格被选中时则需要在底部边框显示被选中标
+  /// 识符。
+  std::string GetChessBoardDownEdge(size_t selected_cell_index) const;
+
  private:
-  game_info::ChessBoard chess_board_;
-  size_t current_item_index_;
+  game_info::ChessBoard chess_board_;  ///< 棋盘
+  size_t chess_board_edge_length_;     ///< 棋盘边长
+  size_t current_cell_index_;          ///< 当前单元格在所有单元格数组中的索引
 };
 
 }  // namespace console
