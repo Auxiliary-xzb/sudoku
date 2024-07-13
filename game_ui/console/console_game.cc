@@ -82,12 +82,11 @@ void ConsoleGame::Play() {
     char input_char = getchar();
 #endif
 
-    // 填充值
+    // 用户填充值
     char max = '0' + chess_board_edge_length_;
     if (input_char > '0' && input_char < max + 1) {
       int cell_x = current_cell_index_ % chess_board_edge_length_ + 1;
       int cell_y = current_cell_index_ / chess_board_edge_length_ + 1;
-      std::cout << max << " : " << cell_x << " " << cell_y << std::endl;
       chess_board_.FillCell(cell_x, cell_y, input_char - '0');
       continue;
     }
@@ -173,48 +172,6 @@ void ConsoleGame::Show() const {
   std::cout << chess_board.str();
 }
 
-void ClearConsole() {
-#ifdef __WIN32
-  system("cls");
-#endif
-}
-
-void SetConsoleEncoding() {
-#ifdef __WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
-}
-
-ChessBoard::GameLevel SetGameLevel() {
-  std::cout << "Please choose game level:" << std::endl
-            << "1. Easy" << std::endl
-            << "2. Middle" << std::endl
-            << "3. Hard" << std::endl;
-
-  ChessBoard::GameLevel level;
-  while (true) {
-    char input_char;
-    std::cin >> input_char;
-
-    if (input_char == '1') {
-      std::cout << "Easy" << std::endl;
-      level = ChessBoard::GameLevel::kEasy;
-    } else if (input_char == '2') {
-      std::cout << "Middle" << std::endl;
-      level = ChessBoard::GameLevel::kMiddle;
-    } else if (input_char == '3') {
-      std::cout << "Hard" << std::endl;
-      level = ChessBoard::GameLevel::kHard;
-    } else {
-      continue;
-    }
-
-    break;
-  }
-
-  return level;
-}
-
 std::string ConsoleGame::GetChessBoardUpEdge() const {
   // 生成棋盘顶部的边框
   std::stringstream up_edge;
@@ -284,4 +241,46 @@ std::string ConsoleGame::GetChessBoardDownEdge(
   down_edge << "\n";
 
   return down_edge.str();
+}
+
+void ClearConsole() {
+#ifdef __WIN32
+  system("cls");
+#endif
+}
+
+void SetConsoleEncoding() {
+#ifdef __WIN32
+  SetConsoleOutputCP(CP_UTF8);
+#endif
+}
+
+ChessBoard::GameLevel SetGameLevel() {
+  std::cout << "Please choose game level:" << std::endl
+            << "1. Easy" << std::endl
+            << "2. Middle" << std::endl
+            << "3. Hard" << std::endl;
+
+  ChessBoard::GameLevel level;
+  while (true) {
+    char input_char;
+    std::cin >> input_char;
+
+    if (input_char == '1') {
+      std::cout << "Easy" << std::endl;
+      level = ChessBoard::GameLevel::kEasy;
+    } else if (input_char == '2') {
+      std::cout << "Middle" << std::endl;
+      level = ChessBoard::GameLevel::kMiddle;
+    } else if (input_char == '3') {
+      std::cout << "Hard" << std::endl;
+      level = ChessBoard::GameLevel::kHard;
+    } else {
+      continue;
+    }
+
+    break;
+  }
+
+  return level;
 }

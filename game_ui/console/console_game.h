@@ -36,6 +36,7 @@ class ConsoleGame {
   void Start();
 
  private:
+  /// \brief 游戏主逻辑
   void Play();
 
   /// \brief 显示棋盘信息
@@ -65,7 +66,7 @@ class ConsoleGame {
  private:
   game_info::ChessBoard chess_board_;  ///< 棋盘
   size_t chess_board_edge_length_;     ///< 棋盘边长
-  size_t current_cell_index_;          ///< 当前单元格在所有单元格数组中的索引
+  size_t current_cell_index_;          ///< 单元格索引，0~棋子总数
 };
 
 }  // namespace console
