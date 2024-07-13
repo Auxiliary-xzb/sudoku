@@ -20,7 +20,7 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "game_ui/console/console_game.h"
+#include "console_game.h"
 
 int main() {
   sudoku::game_ui::console::ConsoleGame console_game;
