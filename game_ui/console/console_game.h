@@ -68,15 +68,19 @@ class ConsoleGame {
   /// 识符。
   std::string GetChessBoardDownEdge(size_t selected_cell_index) const;
 
+  /// \brief 清空终端
   void ClearConsole();
+
+  /// \brief 获取游戏等级
+  /// \return 游戏等级
   game_info::ChessBoard::GameLevel GetGameLevel();
 
  private:
   game_info::ChessBoard chess_board_;  ///< 棋盘
   size_t chess_board_edge_length_;     ///< 棋盘边长
-  size_t current_cell_index_;          ///< 单元格索引，0~棋子总数
+  size_t current_cell_index_;          ///< 当前单元格索引，0~棋子总数
 #ifdef __WIN32
-  WindowsConsole windows_console_;
+  WindowsConsole windows_console_;     ///< Windows终端对象
 #endif
 };
 

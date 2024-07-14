@@ -28,7 +28,6 @@
 
 using namespace sudoku::game_ui::console;
 
-#include <iostream>
 WindowsConsole::WindowsConsole() : is_first_console_buffer_(true) {
   SetConsoleOutputCP(CP_UTF8);
   first_console_buffer_ = CreateConsoleScreenBuffer(
@@ -98,6 +97,7 @@ void WindowsConsole::Clear() {
 }
 
 void WindowsConsole::Write(const std::string& data) {
+  // FIXME: 是否可用operator<<替代？如何判断何时输入结束，切换终端缓冲区？
   DWORD bytes;
   auto& current_console_buffer = GetCurrentConsoleBuffer();
 

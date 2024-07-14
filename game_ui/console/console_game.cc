@@ -35,6 +35,8 @@
 using namespace sudoku::game_info;
 using namespace sudoku::game_ui::console;
 
+/// 构成棋盘的符号，参考：
+/// https://symbl.cc/cn/unicode-table/#box-drawing
 static constexpr char kSymbolLine[] = "\u2500";
 static constexpr char kSymbolColumn[] = "\u2502";
 static constexpr char kSymbolLeftUpCorner[] = "\u250c";
@@ -48,6 +50,7 @@ static constexpr char kSymbolDownEdge[] = "\u2534";
 static constexpr char kSymbolCross[] = "\u253c";
 static constexpr char kSymbolCurrentCell[] = "\u25b2";
 
+/// ASCII码颜色控制字符
 static constexpr char kColorStart[] = "\033[34m";  // blue
 static constexpr char kColorEnd[] = "\033[0m";
 
@@ -59,7 +62,7 @@ ConsoleGame::ConsoleGame() : current_cell_index_(0) {
 void ConsoleGame::Start() {
   chess_board_.SetLevel(GetGameLevel());
 
-  // 指向第一个待填充的单元格
+  // 当前单元格索引总是指向第一个待填充的单元格
   auto chess_board_info = chess_board_.GetChessBoardInfo();
   auto it = std::find_if(chess_board_info.begin(), chess_board_info.end(),
                          [](const Cell *cell) { return cell->value() == -1; });

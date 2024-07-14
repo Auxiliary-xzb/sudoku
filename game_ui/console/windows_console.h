@@ -26,7 +26,6 @@
 #include <windows.h>
 
 #include <string>
-#include <vector>
 
 namespace sudoku {
 namespace game_ui {
@@ -36,16 +35,24 @@ class WindowsConsole {
  public:
   WindowsConsole();
 
+  /// \brief 清除终端
   void Clear();
+
+  /// \brief 写入终端
+  /// \param data 待写入终端数据
+  ///
+  /// 总是应该一次写完单个终端要显示的所有内容
   void Write(const std::string &data);
 
  private:
+  /// \brief 获取当前终端缓冲区句柄
+  /// \return 终端缓冲区句柄
   HANDLE &GetCurrentConsoleBuffer();
 
  private:
-  HANDLE first_console_buffer_;
-  HANDLE second_console_buffer_;
-  bool is_first_console_buffer_;
+  HANDLE first_console_buffer_;   ///< 第一个终端缓冲区
+  HANDLE second_console_buffer_;  ///< 第二个终端缓冲区
+  bool is_first_console_buffer_;  ///< 是否使用第一个终端缓冲区
 };
 
 }  // namespace console
