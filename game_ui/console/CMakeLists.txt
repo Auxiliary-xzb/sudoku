@@ -6,6 +6,8 @@ set(SOURCES
         ${PROJECT_SOURCE_DIR}/game_info/chess_board.cc
         ${PROJECT_SOURCE_DIR}/game_ui/console/console_game.cc
         ${PROJECT_SOURCE_DIR}/game_ui/console/console_game.h
+        windows_console.cc
+        windows_console.h
 )
 
 set(CONSOLE_UI

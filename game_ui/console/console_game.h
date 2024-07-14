@@ -23,6 +23,9 @@
 #ifndef SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAME_H_
 #define SUDOKU_GAME_UI_CONSOLE_CONSOLE_GAME_H_
 
+#ifdef __WIN32
+#include "windows_console.h"
+#endif
 #include "game_info/chess_board.h"
 
 namespace sudoku {
@@ -40,7 +43,9 @@ class ConsoleGame {
   void Play();
 
   /// \brief 显示棋盘信息
-  void Show() const;
+  void Show();
+
+  std::vector<std::string> GetChessBoardLines() const;
 
   /// \brief 构建棋盘顶部边框
   /// \return 棋盘顶部边框
@@ -63,10 +68,16 @@ class ConsoleGame {
   /// 识符。
   std::string GetChessBoardDownEdge(size_t selected_cell_index) const;
 
+  void ClearConsole();
+  game_info::ChessBoard::GameLevel GetGameLevel();
+
  private:
   game_info::ChessBoard chess_board_;  ///< 棋盘
   size_t chess_board_edge_length_;     ///< 棋盘边长
   size_t current_cell_index_;          ///< 单元格索引，0~棋子总数
+#ifdef __WIN32
+  WindowsConsole windows_console_;
+#endif
 };
 
 }  // namespace console

@@ -24,7 +24,8 @@
 
 #ifdef __WIN32
 #include <conio.h>
-#include <windows.h>
+
+#include "windows_console.h"
 #endif
 
 #include <algorithm>
@@ -50,18 +51,13 @@ static constexpr char kSymbolCurrentCell[] = "\u25b2";
 static constexpr char kColorStart[] = "\033[34m";  // blue
 static constexpr char kColorEnd[] = "\033[0m";
 
-static void SetConsoleEncoding();
-static void ClearConsole();
-static ChessBoard::GameLevel SetGameLevel();
-
 ConsoleGame::ConsoleGame() : current_cell_index_(0) {
   chess_board_.Init();
   chess_board_edge_length_ = chess_board_.GetEdgeLength();
-  SetConsoleEncoding();
 }
 
 void ConsoleGame::Start() {
-  chess_board_.SetLevel(SetGameLevel());
+  chess_board_.SetLevel(GetGameLevel());
 
   // 指向第一个待填充的单元格
   auto chess_board_info = chess_board_.GetChessBoardInfo();
@@ -125,12 +121,18 @@ void ConsoleGame::Play() {
   }
 }
 
-void ConsoleGame::Show() const {
+void ConsoleGame::Show() {
   ClearConsole();
+#ifdef __WIN32
+  windows_console_.WriteMultiLine(GetChessBoardLines());
+#endif
+}
+
+std::vector<std::string> ConsoleGame::GetChessBoardLines() const {
   auto chess_board_info = chess_board_.GetChessBoardInfo();
 
-  std::stringstream chess_board;
-  chess_board << GetChessBoardUpEdge();
+  std::vector<std::string> chess_board_line_vec;
+  chess_board_line_vec.push_back(GetChessBoardUpEdge());
 
   auto line_count = chess_board_info.size() / chess_board_edge_length_;
   for (int i = 0; i < line_count; ++i) {
@@ -154,7 +156,7 @@ void ConsoleGame::Show() const {
       }
       line << kSymbolColumn;
     }
-    chess_board << line.str() << "\n";
+    chess_board_line_vec.push_back(line.str());
 
     size_t selected_cell_index = -1;  // max is not exists
     // 选中项目在当前行，则计算行内索引
@@ -163,13 +165,15 @@ void ConsoleGame::Show() const {
     }
 
     if (i == line_count - 1) {
-      chess_board << GetChessBoardDownEdge(selected_cell_index);
+      chess_board_line_vec.push_back(
+          GetChessBoardDownEdge(selected_cell_index));
     } else {
-      chess_board << GetChessBoardLineSeperator(selected_cell_index);
+      chess_board_line_vec.push_back(
+          GetChessBoardLineSeperator(selected_cell_index));
     }
   }
 
-  std::cout << chess_board.str();
+  return chess_board_line_vec;
 }
 
 std::string ConsoleGame::GetChessBoardUpEdge() const {
@@ -184,7 +188,6 @@ std::string ConsoleGame::GetChessBoardUpEdge() const {
       up_edge << kSymbolUpEdge;
     }
   }
-  up_edge << "\n";
 
   return up_edge.str();
 }
@@ -212,7 +215,6 @@ std::string ConsoleGame::GetChessBoardLineSeperator(
       line_seperator << kSymbolCross;
     }
   }
-  line_seperator << "\n";
 
   return line_seperator.str();
 }
@@ -238,28 +240,27 @@ std::string ConsoleGame::GetChessBoardDownEdge(
       down_edge << kSymbolDownEdge;
     }
   }
-  down_edge << "\n";
 
   return down_edge.str();
 }
 
-void ClearConsole() {
+void ConsoleGame::ClearConsole() {
 #ifdef __WIN32
-  system("cls");
+  windows_console_.Clear();
 #endif
 }
 
-void SetConsoleEncoding() {
-#ifdef __WIN32
-  SetConsoleOutputCP(CP_UTF8);
-#endif
-}
+ChessBoard::GameLevel ConsoleGame::GetGameLevel() {
+  ClearConsole();
+  std::vector<std::string> help_info;
+  help_info.emplace_back("Please choose game level:");
+  help_info.emplace_back("1. Easy");
+  help_info.emplace_back("2. Middle");
+  help_info.emplace_back("3. Hard");
 
-ChessBoard::GameLevel SetGameLevel() {
-  std::cout << "Please choose game level:" << std::endl
-            << "1. Easy" << std::endl
-            << "2. Middle" << std::endl
-            << "3. Hard" << std::endl;
+#ifdef __WIN32
+  windows_console_.WriteMultiLine(help_info);
+#endif
 
   ChessBoard::GameLevel level;
   while (true) {
