@@ -37,7 +37,7 @@ class WindowsConsole {
   WindowsConsole();
 
   void Clear();
-  void WriteMultiLine(const std::vector<std::string> &lines);
+  void Write(const std::string &data);
 
  private:
   HANDLE &GetCurrentConsoleBuffer();

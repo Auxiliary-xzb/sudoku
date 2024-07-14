@@ -45,7 +45,7 @@ class ConsoleGame {
   /// \brief 显示棋盘信息
   void Show();
 
-  std::vector<std::string> GetChessBoardLines() const;
+  std::string GetChessBoardLines() const;
 
   /// \brief 构建棋盘顶部边框
   /// \return 棋盘顶部边框

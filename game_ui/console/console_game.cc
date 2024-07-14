@@ -124,15 +124,15 @@ void ConsoleGame::Play() {
 void ConsoleGame::Show() {
   ClearConsole();
 #ifdef __WIN32
-  windows_console_.WriteMultiLine(GetChessBoardLines());
+  windows_console_.Write(GetChessBoardLines());
 #endif
 }
 
-std::vector<std::string> ConsoleGame::GetChessBoardLines() const {
+std::string ConsoleGame::GetChessBoardLines() const {
   auto chess_board_info = chess_board_.GetChessBoardInfo();
 
-  std::vector<std::string> chess_board_line_vec;
-  chess_board_line_vec.push_back(GetChessBoardUpEdge());
+  std::stringstream chess_board;
+  chess_board << GetChessBoardUpEdge();
 
   auto line_count = chess_board_info.size() / chess_board_edge_length_;
   for (int i = 0; i < line_count; ++i) {
@@ -156,7 +156,7 @@ std::vector<std::string> ConsoleGame::GetChessBoardLines() const {
       }
       line << kSymbolColumn;
     }
-    chess_board_line_vec.push_back(line.str());
+    chess_board << line.str() << "\n";
 
     size_t selected_cell_index = -1;  // max is not exists
     // 选中项目在当前行，则计算行内索引
@@ -165,15 +165,13 @@ std::vector<std::string> ConsoleGame::GetChessBoardLines() const {
     }
 
     if (i == line_count - 1) {
-      chess_board_line_vec.push_back(
-          GetChessBoardDownEdge(selected_cell_index));
+      chess_board << GetChessBoardDownEdge(selected_cell_index);
     } else {
-      chess_board_line_vec.push_back(
-          GetChessBoardLineSeperator(selected_cell_index));
+      chess_board << GetChessBoardLineSeperator(selected_cell_index);
     }
   }
 
-  return chess_board_line_vec;
+  return chess_board.str();
 }
 
 std::string ConsoleGame::GetChessBoardUpEdge() const {
@@ -188,6 +186,7 @@ std::string ConsoleGame::GetChessBoardUpEdge() const {
       up_edge << kSymbolUpEdge;
     }
   }
+  up_edge << "\n";
 
   return up_edge.str();
 }
@@ -215,6 +214,7 @@ std::string ConsoleGame::GetChessBoardLineSeperator(
       line_seperator << kSymbolCross;
     }
   }
+  line_seperator << "\n";
 
   return line_seperator.str();
 }
@@ -240,6 +240,7 @@ std::string ConsoleGame::GetChessBoardDownEdge(
       down_edge << kSymbolDownEdge;
     }
   }
+  down_edge << "\n";
 
   return down_edge.str();
 }
@@ -252,14 +253,14 @@ void ConsoleGame::ClearConsole() {
 
 ChessBoard::GameLevel ConsoleGame::GetGameLevel() {
   ClearConsole();
-  std::vector<std::string> help_info;
-  help_info.emplace_back("Please choose game level:");
-  help_info.emplace_back("1. Easy");
-  help_info.emplace_back("2. Middle");
-  help_info.emplace_back("3. Hard");
+  std::stringstream help_info;
+  help_info << "Please choose game level:" << std::endl;
+  help_info << "1. Easy" << std::endl;
+  help_info << "2. Middle" << std::endl;
+  help_info << "3. Hard" << std::endl;
 
 #ifdef __WIN32
-  windows_console_.WriteMultiLine(help_info);
+  windows_console_.Write(help_info.str());
 #endif
 
   ChessBoard::GameLevel level;
@@ -268,13 +269,10 @@ ChessBoard::GameLevel ConsoleGame::GetGameLevel() {
     std::cin >> input_char;
 
     if (input_char == '1') {
-      std::cout << "Easy" << std::endl;
       level = ChessBoard::GameLevel::kEasy;
     } else if (input_char == '2') {
-      std::cout << "Middle" << std::endl;
       level = ChessBoard::GameLevel::kMiddle;
     } else if (input_char == '3') {
-      std::cout << "Hard" << std::endl;
       level = ChessBoard::GameLevel::kHard;
     } else {
       continue;

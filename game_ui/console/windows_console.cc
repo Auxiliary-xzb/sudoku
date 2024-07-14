@@ -22,16 +22,32 @@
 
 #include "windows_console.h"
 
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
+
 using namespace sudoku::game_ui::console;
 
+#include <iostream>
 WindowsConsole::WindowsConsole() : is_first_console_buffer_(true) {
   SetConsoleOutputCP(CP_UTF8);
-  first_console_buffer_ =
-      CreateConsoleScreenBuffer(GENERIC_WRITE, FILE_SHARE_WRITE, nullptr,
-                                CONSOLE_TEXTMODE_BUFFER, nullptr);
-  second_console_buffer_ =
-      CreateConsoleScreenBuffer(GENERIC_WRITE, FILE_SHARE_WRITE, nullptr,
-                                CONSOLE_TEXTMODE_BUFFER, nullptr);
+  first_console_buffer_ = CreateConsoleScreenBuffer(
+      GENERIC_WRITE | GENERIC_READ, FILE_SHARE_WRITE | FILE_SHARE_READ, nullptr,
+      CONSOLE_TEXTMODE_BUFFER, nullptr);
+  second_console_buffer_ = CreateConsoleScreenBuffer(
+      GENERIC_WRITE | GENERIC_READ, FILE_SHARE_WRITE | FILE_SHARE_READ, nullptr,
+      CONSOLE_TEXTMODE_BUFFER, nullptr);
+
+  // 设置启用转移序列，参考:
+  // https://learn.microsoft.com/zh-cn/windows/console/setconsolemode
+  //  https://learn.microsoft.com/zh-cn/windows/console/console-virtual-terminal-sequences
+  DWORD dwMode = 0;
+  GetConsoleMode(first_console_buffer_, &dwMode);
+  dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT;
+  SetConsoleMode(first_console_buffer_, dwMode);
+  GetConsoleMode(second_console_buffer_, &dwMode);
+  dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT;
+  SetConsoleMode(second_console_buffer_, dwMode);
 }
 
 void WindowsConsole::Clear() {
@@ -81,18 +97,13 @@ void WindowsConsole::Clear() {
   SetConsoleCursorPosition(hConsole, coordScreen);
 }
 
-void WindowsConsole::WriteMultiLine(const std::vector<std::string>& lines) {
+void WindowsConsole::Write(const std::string& data) {
   DWORD bytes;
-  COORD pos = {0, 0};
-  auto current_console_buffer = GetCurrentConsoleBuffer();
+  auto& current_console_buffer = GetCurrentConsoleBuffer();
 
-  for (const auto& line : lines) {
-    WriteConsoleOutputCharacter(current_console_buffer, line.data(),
-                                line.length(), pos, &bytes);
-    pos.Y++;
-  }
+  WriteConsole(current_console_buffer, data.data(), data.length(), &bytes,
+               nullptr);
   SetConsoleActiveScreenBuffer(current_console_buffer);
-  SetConsoleCursorPosition(current_console_buffer, pos);
   is_first_console_buffer_ = !is_first_console_buffer_;
 }
 
