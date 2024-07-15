@@ -4,8 +4,6 @@ set(SOURCES
         ${PROJECT_SOURCE_DIR}/game_info/check_unit.cc
         ${PROJECT_SOURCE_DIR}/game_info/chess_board.h
         ${PROJECT_SOURCE_DIR}/game_info/chess_board.cc
-        ${PROJECT_SOURCE_DIR}/game_ui/console/console_game.cc
-        ${PROJECT_SOURCE_DIR}/game_ui/console/console_game.h
 )
 
 set(UI_SOURCES
