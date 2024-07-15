@@ -8,7 +8,7 @@ set(SOURCES
         ${PROJECT_SOURCE_DIR}/game_ui/console/console_game.h
 )
 
-set(CONSOLE_UI
+set(UI_SOURCES
         console_game.h
         console_game.cc
         windows_console.cc
