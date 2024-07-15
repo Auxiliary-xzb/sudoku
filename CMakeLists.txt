@@ -8,4 +8,6 @@ option(USE_CONSOLE_UI "Use console for game" ON)
 
 if (USE_CONSOLE_UI)
     add_subdirectory(game_ui/console)
+else ()
+    add_subdirectory(game_ui/qt)
 endif ()
