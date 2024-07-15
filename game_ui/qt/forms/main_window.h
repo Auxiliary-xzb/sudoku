@@ -20,16 +20,24 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SUDOKU_GAME_UI_QT_MAIN_WINDOW_H_
-#define SUDOKU_GAME_UI_QT_MAIN_WINDOW_H_
+#ifndef SUDOKU_GAME_UI_QT_FORMS_MAIN_WINDOW_H_
+#define SUDOKU_GAME_UI_QT_FORMS_MAIN_WINDOW_H_
 
 #include <QMainWindow>
+#include <QVector>
+
+#include "game_info/chess_board.h"
+#include "game_ui/qt/forms/cell_widget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+namespace sudoku {
+namespace game_ui {
+namespace qt {
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -39,7 +47,12 @@ class MainWindow : public QMainWindow {
   ~MainWindow() override;
 
  private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow *ui_;
+  game_info::ChessBoard chess_board_;
+  QVector<CellWidget *> cell_widget_vec_;
 };
 
-#endif  // SUDOKU_GAME_UI_QT_MAIN_WINDOW_H_
+}  // namespace qt
+}  // namespace game_ui
+}  // namespace sudoku
+#endif  // SUDOKU_GAME_UI_QT_FORMS_MAIN_WINDOW_H_

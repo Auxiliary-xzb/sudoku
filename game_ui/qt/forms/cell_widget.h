@@ -20,14 +20,36 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "main_window.h"
+#ifndef SUDOKU_GAME_UI_QT_FORMS_CELL_WIDGET_H_
+#define SUDOKU_GAME_UI_QT_FORMS_CELL_WIDGET_H_
 
-#include "ui_main_window.h"
+#include <QWidget>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-  ui->setupUi(this);
+#include "game_info/cell.h"
+
+QT_BEGIN_NAMESPACE
+namespace Ui {
+class CellWidget;
 }
+QT_END_NAMESPACE
 
-MainWindow::~MainWindow() { delete ui;
-}
+namespace sudoku {
+namespace game_ui {
+namespace qt {
+
+class CellWidget : public QWidget {
+  Q_OBJECT
+
+ public:
+  explicit CellWidget(game_info::Cell *cell, QWidget *parent = nullptr);
+  ~CellWidget() override;
+
+ private:
+  Ui::CellWidget *ui_;
+  game_info::Cell *cell_;
+};
+
+}  // namespace qt
+}  // namespace game_ui
+}  // namespace sudoku
+#endif  // SUDOKU_GAME_UI_QT_FORMS_CELL_WIDGET_H_

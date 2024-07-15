@@ -20,15 +20,36 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <QApplication>
+#include "main_window.h"
 
-#include "forms/main_window.h"
+#include <QGridLayout>
+#include <QLabel>
+#include <QString>
 
-int main(int argc, char* argv[]) {
-  QApplication a(argc, argv);
+#include "forms/ui_main_window.h"
 
-  sudoku::game_ui::qt::MainWindow main_window;
-  main_window.show();
+using namespace sudoku::game_ui::qt;
+using namespace sudoku::game_info;
 
-  return QApplication::exec();
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui_(new Ui::MainWindow) {
+  ui_->setupUi(this);
+  chess_board_.Init();
+  chess_board_.SetLevel(ChessBoard::GameLevel::kEasy);
+
+  auto chess_board_info = chess_board_.GetChessBoardInfo();
+  for (auto cell : chess_board_info) {
+    cell_widget_vec_.push_back(new CellWidget(cell, this));
+  }
+
+  auto edge_length = chess_board_.GetEdgeLength();
+  auto grid_layout = new QGridLayout();
+
+  for (size_t i = 0; i < cell_widget_vec_.size(); ++i) {
+    grid_layout->addWidget(cell_widget_vec_[i], i / edge_length,
+                           i % edge_length);
+  }
+  ui_->widget_main_->setLayout(grid_layout);
 }
+
+MainWindow::~MainWindow() { delete ui_; }

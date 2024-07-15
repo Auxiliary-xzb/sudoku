@@ -20,15 +20,24 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <QApplication>
+#include "cell_widget.h"
 
-#include "forms/main_window.h"
+#include <QString>
 
-int main(int argc, char* argv[]) {
-  QApplication a(argc, argv);
+#include "forms/ui_cell_widget.h"
 
-  sudoku::game_ui::qt::MainWindow main_window;
-  main_window.show();
+using namespace sudoku::game_ui::qt;
+using namespace sudoku::game_info;
 
-  return QApplication::exec();
+CellWidget::CellWidget(Cell* cell, QWidget* parent)
+    : QWidget(parent), ui_(new Ui::CellWidget), cell_(cell) {
+  ui_->setupUi(this);
+  if (cell_->value() == -1) {
+    ui_->label_value_->setText("");
+  } else {
+    ui_->label_value_->setText(std::to_string(cell_->value()).data());
+  }
+}
+
+CellWidget::~CellWidget() { delete ui_;
 }

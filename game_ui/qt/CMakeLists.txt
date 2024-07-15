@@ -2,12 +2,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-
+# 根据QT版本拼接环境变量字符串QTx_CMAKE_PREFIX_PATH
 set(QT_VERSION_MAJOR 5)
 set(QT_CMAKE_PREFIX_PATH "QT${QT_VERSION_MAJOR}_CMAKE_PREFIX_PATH")
 message(STATUS "QT_VERSION_MAJOR : ${QT_VERSION_MAJOR}")
 message(STATUS "QT_CMAKE_PREFIX_PATH : ${QT_CMAKE_PREFIX_PATH}")
 
+# 查找环境变量QTx_CMAKE_PREFIX_PATH。
+# 该变量为Qt编译器路径，如Qt\Qt6.5.3\6.5.3\mingw_64
 if (NOT DEFINED ENV{${QT_CMAKE_PREFIX_PATH}})
     message(FATAL_ERROR "Not define environment variable:QT_CMAKE_PREFIX_PATH")
 endif ()
@@ -30,9 +32,12 @@ set(SOURCES
 )
 
 set(QT_UI
-        main_window.cc
-        main_window.h
-        main_window.ui
+        forms/main_window.cc
+        forms/main_window.h
+        forms/main_window.ui
+        forms/cell_widget.cc
+        forms/cell_widget.h
+        forms/cell_widget.ui
 )
 
 # TODO: 如何在CMake中使用qrc的方式添加资源，并使用Qt5的资源路径进行访问？
