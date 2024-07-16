@@ -46,10 +46,14 @@ class MainWindow : public QMainWindow {
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
 
+ protected:
+  void keyPressEvent(QKeyEvent *event) override;
+
  private:
-  Ui::MainWindow *ui_;
-  game_info::ChessBoard chess_board_;
-  QVector<CellWidget *> cell_widget_vec_;
+  Ui::MainWindow *ui_;                     ///< UI界面
+  game_info::ChessBoard chess_board_;      ///< 棋盘信息
+  QVector<CellWidget *> cell_widget_vec_;  ///< 棋盘显示单元格数组
+  size_t current_cell_index_;
 };
 
 }  // namespace qt

@@ -44,6 +44,10 @@ class CellWidget : public QWidget {
   explicit CellWidget(game_info::Cell *cell, QWidget *parent = nullptr);
   ~CellWidget() override;
 
+  void SetActive(bool is_active);
+  bool IsEmpty() const;
+  void UpdateValue();
+
  private:
   Ui::CellWidget *ui_;
   game_info::Cell *cell_;

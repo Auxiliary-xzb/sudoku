@@ -32,12 +32,28 @@ using namespace sudoku::game_info;
 CellWidget::CellWidget(Cell* cell, QWidget* parent)
     : QWidget(parent), ui_(new Ui::CellWidget), cell_(cell) {
   ui_->setupUi(this);
+  UpdateValue();
+}
+
+CellWidget::~CellWidget() { delete ui_; }
+
+void CellWidget::SetActive(bool is_active) {
+  QString value =
+      cell_->value() == -1 ? "" : std::to_string(cell_->value()).data();
+  if (is_active) {
+    value += "(*)";
+  }
+  ui_->label_value_->setText(value);
+}
+
+bool CellWidget::IsEmpty() const {
+  return cell_->state() == Cell::CellState::kEmpty;
+}
+
+void CellWidget::UpdateValue() {
   if (cell_->value() == -1) {
     ui_->label_value_->setText("");
   } else {
     ui_->label_value_->setText(std::to_string(cell_->value()).data());
   }
-}
-
-CellWidget::~CellWidget() { delete ui_;
 }
