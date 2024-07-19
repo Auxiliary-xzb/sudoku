@@ -44,9 +44,16 @@ class CellWidget : public QWidget {
   explicit CellWidget(game_info::Cell *cell, QWidget *parent = nullptr);
   ~CellWidget() override;
 
-  void SetActive(bool is_active);
+ protected:
+  void focusInEvent(QFocusEvent *event) override;
+  void focusOutEvent(QFocusEvent *event) override;
+
+ public:
   bool IsEmpty() const;
   void UpdateValue();
+
+ private:
+  std::string GetValue() const;
 
  private:
   Ui::CellWidget *ui_;

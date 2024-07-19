@@ -33,17 +33,20 @@ CellWidget::CellWidget(Cell* cell, QWidget* parent)
     : QWidget(parent), ui_(new Ui::CellWidget), cell_(cell) {
   ui_->setupUi(this);
   UpdateValue();
+
+  setFocusPolicy(Qt::StrongFocus);
 }
 
 CellWidget::~CellWidget() { delete ui_; }
 
-void CellWidget::SetActive(bool is_active) {
-  QString value =
-      cell_->value() == -1 ? "" : std::to_string(cell_->value()).data();
-  if (is_active) {
-    value += "(*)";
-  }
-  ui_->label_value_->setText(value);
+void CellWidget::focusInEvent(QFocusEvent* event) {
+  auto value = GetValue();
+  value += "(*)";
+  ui_->label_value_->setText(QString::fromStdString(value));
+}
+
+void CellWidget::focusOutEvent(QFocusEvent* event) {
+  ui_->label_value_->setText(QString::fromStdString(GetValue()));
 }
 
 bool CellWidget::IsEmpty() const {
@@ -56,4 +59,12 @@ void CellWidget::UpdateValue() {
   } else {
     ui_->label_value_->setText(std::to_string(cell_->value()).data());
   }
+}
+
+std::string CellWidget::GetValue() const {
+  if (cell_->value() == -1) {
+    return "";
+  }
+
+  return std::to_string(cell_->value());
 }

@@ -52,9 +52,13 @@ MainWindow::MainWindow(QWidget *parent)
     cell_widget_vec_.push_back(cell_widget);
     grid_layout->addWidget(cell_widget, i / chess_board_edge_length,
                            i % chess_board_edge_length);
+    if (i != 0) {
+      setTabOrder(cell_widget_vec_[i - 1], cell_widget_vec_[i]);
+    }
   }
   ui_->widget_main_->setLayout(grid_layout);
-  cell_widget_vec_[current_cell_index_]->SetActive(true);
+  // 指向第一个待填充的单元格
+  cell_widget_vec_[current_cell_index_]->setFocus();
 }
 
 MainWindow::~MainWindow() { delete ui_; }
@@ -105,8 +109,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
   }
 
   if (active_cell_changed) {
-    cell_widget_vec_[current_cell_index_]->SetActive(false);
+    // cell_widget_vec_[current_cell_index_]->SetActive(false);
+    // cell_widget_vec_[current_cell_index_]->setFocus();
     current_cell_index_ = next_cell_index;
-    cell_widget_vec_[current_cell_index_]->SetActive(true);
+    // cell_widget_vec_[current_cell_index_]->SetActive(true);
+    cell_widget_vec_[current_cell_index_]->setFocus();
   }
 }
