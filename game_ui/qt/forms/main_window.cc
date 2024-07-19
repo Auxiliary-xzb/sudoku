@@ -80,26 +80,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
   bool active_cell_changed = false;
   int next_cell_index = static_cast<int>(current_cell_index_);
-  if (event->key() == Qt::Key_W) {
+  if (event->key() == Qt::Key_W || event->key() == Qt::Key_Up) {
     // 上移后不应该超过棋盘最小值
     next_cell_index -= static_cast<int>(chess_board_edge_length);
     if (next_cell_index > -1) {
       active_cell_changed = true;
     }
-  } else if (event->key() == Qt::Key_S) {
+  } else if (event->key() == Qt::Key_S || event->key() == Qt::Key_Down) {
     // 下移不应该超过棋盘最大值
     next_cell_index += static_cast<int>(chess_board_edge_length);
     if (next_cell_index < chess_board_edge_length * chess_board_edge_length) {
       active_cell_changed = true;
     }
-  } else if (event->key() == Qt::Key_A) {
+  } else if (event->key() == Qt::Key_A || event->key() == Qt::Key_Left) {
     // 左移后当前行索引不应该比移动前大，如果大则表明移动到上一行了
     next_cell_index -= 1;
     if (next_cell_index % chess_board_edge_length <
         current_cell_index_ % chess_board_edge_length) {
       active_cell_changed = true;
     }
-  } else if (event->key() == Qt::Key_D) {
+  } else if (event->key() == Qt::Key_D || event->key() == Qt::Key_Right) {
     // 右移后当前行索引不应该比移动前小，如果小则表明移动到下一行了
     next_cell_index += 1;
     if (next_cell_index % chess_board_edge_length >
