@@ -40,7 +40,6 @@ set(QT_UI
         forms/cell_widget.ui
 )
 
-# TODO: 如何在CMake中使用qrc的方式添加资源，并使用Qt5的资源路径进行访问？
 add_executable(${PROJECT_NAME} main.cc ${SOURCES} ${QT_UI})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR})
 

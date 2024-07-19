@@ -59,4 +59,5 @@ class MainWindow : public QMainWindow {
 }  // namespace qt
 }  // namespace game_ui
 }  // namespace sudoku
+
 #endif  // SUDOKU_GAME_UI_QT_FORMS_MAIN_WINDOW_H_

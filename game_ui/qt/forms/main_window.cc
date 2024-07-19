@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() { delete ui_; }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-  if (event->key() > Qt::Key_0 && event->key() < Qt::Key_9) {
+  if (event->key() > Qt::Key_0 && event->key() <= Qt::Key_9) {
     auto chess_board_edge_length = chess_board_.GetEdgeLength();
     int cell_x = current_cell_index_ % chess_board_edge_length + 1;
     int cell_y = current_cell_index_ / chess_board_edge_length + 1;
