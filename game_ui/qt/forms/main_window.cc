@@ -24,6 +24,7 @@
 
 #include <QGridLayout>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include <algorithm>
 
 #include "forms/ui_main_window.h"
@@ -55,6 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     if (i != 0) {
       setTabOrder(cell_widget_vec_[i - 1], cell_widget_vec_[i]);
     }
+    connect(cell_widget, &CellWidget::CellWidgetFocusIn, this,
+            &MainWindow::OnCellWidgetFocusIn);
   }
   ui_->widget_main_->setLayout(grid_layout);
   // 指向第一个待填充的单元格
@@ -68,11 +71,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     auto chess_board_edge_length = chess_board_.GetEdgeLength();
     int cell_x = current_cell_index_ % chess_board_edge_length + 1;
     int cell_y = current_cell_index_ / chess_board_edge_length + 1;
-    bool ok = chess_board_.FillCell(cell_x, cell_y, event->key() - Qt::Key_0);
-    if (ok) {
+    if (chess_board_.FillCell(cell_x, cell_y, event->key() - Qt::Key_0)) {
       cell_widget_vec_[current_cell_index_]->UpdateValue();
     }
 
+    if (chess_board_.IsComplete()) {
+      QMessageBox::information(this, "恭喜", "游戏结束");
+    }
     return;
   }
 
@@ -109,10 +114,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
   }
 
   if (active_cell_changed) {
-    // cell_widget_vec_[current_cell_index_]->SetActive(false);
-    // cell_widget_vec_[current_cell_index_]->setFocus();
     current_cell_index_ = next_cell_index;
-    // cell_widget_vec_[current_cell_index_]->SetActive(true);
     cell_widget_vec_[current_cell_index_]->setFocus();
+  }
+}
+
+void MainWindow::OnCellWidgetFocusIn(const CellWidget *cell_widget) {
+  for (int i = 0; i < cell_widget_vec_.size(); ++i) {
+    if (cell_widget_vec_[i] == cell_widget) {
+      current_cell_index_ = i;
+    }
   }
 }

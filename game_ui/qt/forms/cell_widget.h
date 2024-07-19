@@ -48,6 +48,11 @@ class CellWidget : public QWidget {
   void focusInEvent(QFocusEvent *event) override;
   void focusOutEvent(QFocusEvent *event) override;
 
+  void paintEvent(QPaintEvent *event) override;
+
+ signals:
+  void CellWidgetFocusIn(CellWidget *cell_widget);
+
  public:
   bool IsEmpty() const;
   void UpdateValue();
@@ -58,6 +63,7 @@ class CellWidget : public QWidget {
  private:
   Ui::CellWidget *ui_;
   game_info::Cell *cell_;
+  QColor normal_color_;
 };
 
 }  // namespace qt

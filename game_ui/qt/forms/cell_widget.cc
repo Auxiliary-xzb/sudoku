@@ -35,17 +35,26 @@ CellWidget::CellWidget(Cell* cell, QWidget* parent)
   UpdateValue();
 
   setFocusPolicy(Qt::StrongFocus);
+  normal_color_ = palette().window().color();
+  setAutoFillBackground(true);
 }
 
 CellWidget::~CellWidget() { delete ui_; }
 
 void CellWidget::focusInEvent(QFocusEvent* event) {
-  auto value = GetValue();
-  value += "(*)";
-  ui_->label_value_->setText(QString::fromStdString(value));
+  auto current_palette = palette();
+  current_palette.setColor(QPalette::Background, Qt::gray);
+  setPalette(current_palette);
+  emit CellWidgetFocusIn(this);
 }
 
 void CellWidget::focusOutEvent(QFocusEvent* event) {
+  auto current_palette = palette();
+  current_palette.setColor(QPalette::Background, normal_color_);
+  setPalette(current_palette);
+}
+
+void CellWidget::paintEvent(QPaintEvent* event) {
   ui_->label_value_->setText(QString::fromStdString(GetValue()));
 }
 

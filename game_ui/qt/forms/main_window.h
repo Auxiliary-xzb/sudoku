@@ -49,6 +49,9 @@ class MainWindow : public QMainWindow {
  protected:
   void keyPressEvent(QKeyEvent *event) override;
 
+ public slots:
+  void OnCellWidgetFocusIn(const CellWidget *cell_widget);
+
  private:
   Ui::MainWindow *ui_;                     ///< UI界面
   game_info::ChessBoard chess_board_;      ///< 棋盘信息
